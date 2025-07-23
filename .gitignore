@@ -1,0 +1,17 @@
+# Node.js (React)
+node_modules/
+dist/
+.env
+
+# .NET Core
+bin/
+obj/
+*.user
+*.suo
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
