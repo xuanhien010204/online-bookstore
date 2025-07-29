@@ -12,15 +12,15 @@ using OnlineBookstore.Infrastructure.Data;
 namespace OnlineBookstore.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250723081331_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250729083903_FixBookIdGeneration")]
+    partial class FixBookIdGeneration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.3")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
