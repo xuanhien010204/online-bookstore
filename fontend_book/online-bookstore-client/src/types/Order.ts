@@ -1,5 +1,5 @@
 import { OrderDetail } from "./OrderDetail";
-import { User } from "./user";
+import { User } from "./User";
 
 export interface Order {
     id: number;
