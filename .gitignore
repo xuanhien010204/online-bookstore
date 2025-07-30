@@ -17,3 +17,11 @@ obj/
 Thumbs.db
 # Visual Studio
 .vs/
+# ASP.NET Core
+.appsettings.Development.json
+.appsettings.json/
+
+# Docker
+.Dockerfile
+.docker-compose.yml
+*.publish/
