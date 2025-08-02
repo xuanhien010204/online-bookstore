@@ -5,6 +5,15 @@
         User,
         Admin
     }
+
+    public enum AccountStatus
+    {
+        Active,
+        Inactive,
+        Suspended,
+        Deleted
+    }
+
     public class User
     {
         public long Id { get; set; }
@@ -16,11 +25,12 @@
         public string? Address { get; set; }
         public string? Phone { get; set; }
         public Role Role { get; set; } = Role.User;
+        public AccountStatus Status { get; set; } = AccountStatus.Active;
         public string? AvatarUrl { get; set; }
-
         public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
+        public DateTime? LastLoginAt { get; set; }
 
         public ICollection<Order> Orders { get; set; } = new List<Order>();
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
