@@ -1,6 +1,5 @@
-import axiosInstance from "./axiosInstance";
-import { Book } from "../types/Book";
-
+import axiosInstance from "../../api/axiosInstance";
+import { Book } from "../../types/Book";
 const bookApi = {
     getBooks: async (): Promise<Book[]> => {
         const res = await axiosInstance.get('/Books')
