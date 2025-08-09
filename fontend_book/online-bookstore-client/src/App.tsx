@@ -1,13 +1,17 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import BookList from './pages/BookList';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import BookList from './pages/BookListPage';
+import LoginPage from './pages/Auth/LoginPage';
 
 function App() {
   return (
-    <div>
-      <BookList />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/books" element={<BookList />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
