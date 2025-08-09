@@ -12,7 +12,7 @@ using OnlineBookstore.Infrastructure.Data;
 namespace OnlineBookstore.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250802114212_AddLastLoginAtToUser")]
+    [Migration("20250804085230_AddLastLoginAtToUser")]
     partial class AddLastLoginAtToUser
     {
         /// <inheritdoc />
@@ -223,6 +223,9 @@ namespace OnlineBookstore.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<long?>("DeleteByUserId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("text");
@@ -233,9 +236,6 @@ namespace OnlineBookstore.Infrastructure.Migrations
 
                     b.Property<string>("Gender")
                         .HasColumnType("text");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("boolean");
 
                     b.Property<DateTime?>("LastLoginAt")
                         .HasColumnType("timestamp with time zone");
@@ -262,6 +262,8 @@ namespace OnlineBookstore.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DeleteByUserId");
 
                     b.ToTable("Users");
                 });
@@ -343,6 +345,15 @@ namespace OnlineBookstore.Infrastructure.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("OnlineBookstore.Domain.Entities.User", b =>
+                {
+                    b.HasOne("OnlineBookstore.Domain.Entities.User", "DeleteByUser")
+                        .WithMany()
+                        .HasForeignKey("DeleteByUserId");
+
+                    b.Navigation("DeleteByUser");
                 });
 
             modelBuilder.Entity("OnlineBookstore.Domain.Entities.Book", b =>

@@ -59,14 +59,19 @@ namespace OnlineBookstore.Infrastructure.Migrations
                     Role = table.Column<string>(type: "text", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     AvatarUrl = table.Column<string>(type: "text", nullable: true),
-                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    LastLoginAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    LastLoginAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DeleteByUserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_Users_DeleteByUserId",
+                        column: x => x.DeleteByUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -227,6 +232,11 @@ namespace OnlineBookstore.Infrastructure.Migrations
                 name: "IX_Reviews_UserId",
                 table: "Reviews",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_DeleteByUserId",
+                table: "Users",
+                column: "DeleteByUserId");
         }
 
         /// <inheritdoc />
