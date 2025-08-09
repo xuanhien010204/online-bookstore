@@ -1,9 +1,8 @@
+using Google.Apis.Auth;
 using Microsoft.Extensions.Configuration;
 using OnlineBookstore.Domain.DTOs;
 using OnlineBookstore.Domain.Entities;
 using OnlineBookstore.Domain.Interfaces;
-using System.Security.Claims;
-using Google.Apis.Auth;
 
 namespace OnlineBookstore.Application.Services
 {
@@ -24,7 +23,7 @@ namespace OnlineBookstore.Application.Services
         {
             if (await _userRepository.EmailExistsAsync(request.Email))
             {
-                return new AuthResponse { Success = false, Message = "Email ?ã t?n t?i" };
+                return new AuthResponse { Success = false, Message = "Email already exists" };
             }
 
             var user = new User
@@ -47,7 +46,7 @@ namespace OnlineBookstore.Application.Services
             return new AuthResponse
             {
                 Success = true,
-                Message = "??ng ký thành công",
+                Message = "Registration successful",
                 Token = token,
                 User = MapToUserDto(user)
             };
@@ -58,12 +57,12 @@ namespace OnlineBookstore.Application.Services
             var user = await _userRepository.GetByEmailAsync(request.Email);
             if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
             {
-                return new AuthResponse { Success = false, Message = "Email ho?c m?t kh?u không ?úng" };
+                return new AuthResponse { Success = false, Message = "Invalid email or password" };
             }
 
             if (user.Status != AccountStatus.Active)
             {
-                return new AuthResponse { Success = false, Message = "Tài kho?n không ho?t ??ng" };
+                return new AuthResponse { Success = false, Message = "Account is not active" };
             }
 
             user.UpdatedAt = DateTime.UtcNow;
@@ -75,7 +74,7 @@ namespace OnlineBookstore.Application.Services
             return new AuthResponse
             {
                 Success = true,
-                Message = "??ng nh?p thành công",
+                Message = "Login successful",
                 Token = token,
                 User = MapToUserDto(user)
             };
@@ -109,7 +108,7 @@ namespace OnlineBookstore.Application.Services
                 }
                 else if (user.Status != AccountStatus.Active)
                 {
-                    return new AuthResponse { Success = false, Message = "Tài kho?n ?ã b? khóa" };
+                    return new AuthResponse { Success = false, Message = "Account is locked" };
                 }
 
                 user.UpdatedAt = DateTime.UtcNow;
@@ -120,18 +119,18 @@ namespace OnlineBookstore.Application.Services
                 return new AuthResponse
                 {
                     Success = true,
-                    Message = "??ng nh?p Google thành công",
+                    Message = "Google login successful",
                     Token = token,
                     User = MapToUserDto(user)
                 };
             }
             catch (InvalidJwtException)
             {
-                return new AuthResponse { Success = false, Message = "Google token không h?p l?" };
+                return new AuthResponse { Success = false, Message = "Invalid Google token" };
             }
             catch (Exception ex)
             {
-                return new AuthResponse { Success = false, Message = $"Có l?i x?y ra: {ex.Message}" };
+                return new AuthResponse { Success = false, Message = $"An error occurred: {ex.Message}" };
             }
         }
 
@@ -139,7 +138,7 @@ namespace OnlineBookstore.Application.Services
         {
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
-                return new AuthResponse { Success = false, Message = "Không tìm th?y ng??i dùng" };
+                return new AuthResponse { Success = false, Message = "User not found" };
 
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
@@ -152,7 +151,7 @@ namespace OnlineBookstore.Application.Services
             return new AuthResponse
             {
                 Success = true,
-                Message = "C?p nh?t thành công",
+                Message = "Update successful",
                 User = MapToUserDto(user)
             };
         }
@@ -161,16 +160,16 @@ namespace OnlineBookstore.Application.Services
         {
             var user = await _userRepository.GetByIdAsync(userId);
             if (user == null)
-                return new AuthResponse { Success = false, Message = "Không tìm th?y ng??i dùng" };
+                return new AuthResponse { Success = false, Message = "User not found" };
 
             if (!BCrypt.Net.BCrypt.Verify(request.CurrentPassword, user.PasswordHash))
-                return new AuthResponse { Success = false, Message = "M?t kh?u hi?n t?i không ?úng" };
+                return new AuthResponse { Success = false, Message = "Current password is incorrect" };
 
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
             user.UpdatedAt = DateTime.UtcNow;
             await _userRepository.UpdateAsync(user);
 
-            return new AuthResponse { Success = true, Message = "??i m?t kh?u thành công" };
+            return new AuthResponse { Success = true, Message = "Password changed successfully" };
         }
 
         public async Task<UserDto?> GetUserProfileAsync(long userId)
@@ -187,7 +186,7 @@ namespace OnlineBookstore.Application.Services
                 Email = user.Email,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
-                FullName = $"{user.FirstName} {user.LastName}",
+                FullName = user.FullName(),
                 Phone = user.Phone,
                 Address = user.Address,
                 AvatarUrl = user.AvatarUrl,

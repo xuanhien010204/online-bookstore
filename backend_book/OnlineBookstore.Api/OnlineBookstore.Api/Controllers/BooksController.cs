@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineBookstore.Domain.DTOs;
+using OnlineBookstore.Domain.Entities;
 using OnlineBookstore.Domain.Interfaces;
 
 namespace OnlineBookstore.Api.Controllers
 {
     [ApiController]
+    [Authorize(Roles = nameof(Role.User))]
     [Route("api/[controller]")]
     public class BooksController : ControllerBase
     {

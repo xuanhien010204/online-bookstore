@@ -27,13 +27,18 @@
         public Role Role { get; set; } = Role.User;
         public AccountStatus Status { get; set; } = AccountStatus.Active;
         public string? AvatarUrl { get; set; }
-        public bool IsActive { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime? UpdatedAt { get; set; }
         public DateTime? LastLoginAt { get; set; }
+        public User? DeleteByUser { get; set; }
+        public long? DeleteByUserId { get; set; }
 
         public ICollection<Order> Orders { get; set; } = new List<Order>();
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public string FullName()
+        {
+            return this.FirstName + " " + this.LastName;
+        }
     }
 
 }
