@@ -15,3 +15,70 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Custom utilities for line clamping */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Custom scrollbar for better UX */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Ant Design customization */
+.ant-layout-header {
+  line-height: 64px;
+  height: 64px;
+}
+
+.ant-card {
+  border-radius: 8px;
+}
+
+.ant-btn {
+  border-radius: 6px;
+}
+
+/* Book card hover effects */
+.ant-card.ant-card-hoverable {
+  transition: all 0.3s ease;
+}
+
+.ant-card.ant-card-hoverable:hover {
+  transform: translateY(-2px);
+}
+
+/* Custom carousel dots */
+.ant-carousel .slick-dots li button {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+}
+
+.ant-carousel .slick-dots li.slick-active button {
+  background: #fff;
+}
